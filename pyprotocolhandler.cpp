@@ -25,18 +25,18 @@ wxString wxPyProtocolHandler::GetContent(const wxString &url)   {
 
     PyObject *python_url = PYSTRING_FROM_WXSTRING(url);
     PyObject *result = PyObject_CallMethodObjArgs(m_handler, method_name, python_url, NULL);
-    /* XXX: Add error  handling.
-    if (result == NULL) {
+    if (!result) {
+        PyGILState_Release(gstate);
+        return wxT("");
     }
-    */
 
-/*
-    wxString *wxResult = wxString_in_helper(result);
-    if (!wxResult)  {
-        fprintf(stderr, "!wxResult");
+    wxString *temp_string = wxString_in_helper(result);
+    if (!temp_string)  {
+        PyErr_SetString(PyExc_ValueError, "GetContent must return a string.");
+        PyGILState_Release(gstate);
+        return wxT("");
     }
-*/
-    wxString wxResult(*wxString_in_helper(result));
+    wxString wxResult(*temp_string);
     PyGILState_Release(gstate);
     return wxResult;
 }
@@ -48,12 +48,18 @@ wxString wxPyProtocolHandler::GetContentType(const wxString &url)   {
     PyObject *python_url = PYSTRING_FROM_WXSTRING(url);
 
     PyObject *result = PyObject_CallMethodObjArgs(m_handler, method_name, python_url, NULL);
-    /* XXX: Add error  handling.
-    if (result == NULL) {
+    if (!result) {
+        PyGILState_Release(gstate);
+        return wxT("");
     }
-    */
 
-    wxString wxResult(*wxString_in_helper(result));
+    wxString *temp_string = wxString_in_helper(result);
+    if (!temp_string)  {
+        PyErr_SetString(PyExc_ValueError, "GetContentType must return a string.");
+        PyGILState_Release(gstate);
+        return wxT("");
+    }
+    wxString wxResult(*temp_string);
     PyGILState_Release(gstate);
 
     return wxResult;
