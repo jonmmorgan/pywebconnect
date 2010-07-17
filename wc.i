@@ -147,7 +147,7 @@ public:
     static bool InitEngine(const wxString& path);
     static bool AddContentHandler(wxWebContentHandler* handler, bool take_ownership = false);
     static void AddPluginPath(const wxString& path);
-//    static wxWebPreferences GetPreferences();
+    static wxWebPreferences GetPreferences();
     
     static bool SaveRequest(
                  const wxString& uri,
@@ -242,6 +242,52 @@ public:
     wxDOMDocument GetDOMDocument();
     
 };
+
+class wxWebPreferences
+{
+friend class wxWebControl;
+
+private:
+
+    // private constructor - please use wxWebControl::GetWebPreferences()
+    wxWebPreferences();
+    
+public:
+
+    bool GetBoolPref(const wxString& name);
+    wxString GetStringPref(const wxString& name);
+    int GetIntPref(const wxString& name);
+
+    void SetIntPref(const wxString& name, int value);
+    void SetStringPref(const wxString& name, const wxString& value);
+    void SetBoolPref(const wxString& name, bool value);
+};
+
+%pythoncode {
+class wxWebPreferencesHelper(object):
+    def __init__(self):
+        self._preferences = None
+
+    # XXX: I do not know any way to implement __getitem__(), since we cannot
+    # guess what type of preference it is.
+    def __getitem__(self, key):
+        raise NotImplementedError("Use WebControl.GetPreferences() to get preference values.")
+
+    def __setitem__(self, key, value):
+        if not self._preferences:
+            self._preferences = WebControl.GetPreferences()
+
+        if isinstance(value, basestring):
+            self._preferences.SetStringPref(key, value)
+        elif isinstance(value, int):
+            self._preferences.SetIntPref(key, value)
+        elif isinstance(value, bool):
+            self._preferences.SetBoolPref(key, value)
+        else:
+            raise ValueError("Unrecognised value type '%s' when setting preferences." % value)
+        
+WebControl.preferences = wxWebPreferencesHelper()
+}
 
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
