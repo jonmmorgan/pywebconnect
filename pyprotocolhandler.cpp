@@ -26,6 +26,7 @@ wxString wxPyProtocolHandler::GetContent(const wxString &url)   {
     PyObject *python_url = PYSTRING_FROM_WXSTRING(url);
     PyObject *result = PyObject_CallMethodObjArgs(m_handler, method_name, python_url, NULL);
     if (!result) {
+        PyErr_WriteUnraisable(method_name);
         PyGILState_Release(gstate);
         return wxT("");
     }
@@ -49,6 +50,7 @@ wxString wxPyProtocolHandler::GetContentType(const wxString &url)   {
 
     PyObject *result = PyObject_CallMethodObjArgs(m_handler, method_name, python_url, NULL);
     if (!result) {
+        PyErr_WriteUnraisable(method_name);
         PyGILState_Release(gstate);
         return wxT("");
     }
