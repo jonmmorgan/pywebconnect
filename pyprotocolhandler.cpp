@@ -25,11 +25,14 @@ wxString wxPyProtocolHandler::GetContent(const wxString &url)   {
 
     PyObject *python_url = PYSTRING_FROM_WXSTRING(url);
     PyObject *result = PyObject_CallMethodObjArgs(m_handler, method_name, python_url, NULL);
+    Py_DECREF(python_url);
     if (!result) {
         PyErr_WriteUnraisable(method_name);
+        Py_DECREF(method_name);
         PyGILState_Release(gstate);
         return wxT("");
     }
+    Py_DECREF(method_name);
 
     wxString *temp_string = wxString_in_helper(result);
     if (!temp_string)  {
@@ -49,11 +52,14 @@ wxString wxPyProtocolHandler::GetContentType(const wxString &url)   {
     PyObject *python_url = PYSTRING_FROM_WXSTRING(url);
 
     PyObject *result = PyObject_CallMethodObjArgs(m_handler, method_name, python_url, NULL);
+    Py_DECREF(python_url);
     if (!result) {
         PyErr_WriteUnraisable(method_name);
+        Py_DECREF(method_name);
         PyGILState_Release(gstate);
         return wxT("");
     }
+    Py_DECREF(method_name);
 
     wxString *temp_string = wxString_in_helper(result);
     if (!temp_string)  {
