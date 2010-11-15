@@ -145,6 +145,7 @@ class wxWebControl : public wxControl
 public:
 
     static bool InitEngine(const wxString& path);
+    static void InstallXRCHandler(wxXmlResource *res = NULL);
     static bool AddContentHandler(wxWebContentHandler* handler, bool take_ownership = false);
     static void AddPluginPath(const wxString& path);
     static wxWebPreferences GetPreferences();
@@ -167,13 +168,20 @@ public:
     %pythonAppend wxWebControl         "self._setOORInfo(self)"
     %pythonAppend wxWebControl()       ""
 
+    %typemap(out) wxWebControl*;    // turn off this typemap
     wxWebControl(wxWindow* parent,
                  wxWindowID id = wxID_ANY,
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize);
+    %RenameCtor(PreWebControl, wxWebControl());
 
-    // TODO: There is no def-ctor and Create() method
-    
+    // Turn it back on again
+    %typemap(out) wxWebControl* { $result = wxPyMake_wxObject($1, $owner); }
+
+    bool Create(wxWindow* parent,
+                 wxWindowID id = wxID_ANY,
+                 const wxPoint& pos = wxDefaultPosition,
+                 const wxSize& size = wxDefaultSize);
    
     bool IsOk() const;
     
