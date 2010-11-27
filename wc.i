@@ -148,6 +148,7 @@ public:
     static void InstallXRCHandler(wxXmlResource *res = NULL);
     static bool AddContentHandler(wxWebContentHandler* handler, bool take_ownership = false);
     static void AddPluginPath(const wxString& path);
+    static void SetProfilePath(const wxString& path);
     static wxWebPreferences GetPreferences();
     
     static bool SaveRequest(
