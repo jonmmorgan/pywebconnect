@@ -248,6 +248,7 @@ public:
     
     // other
     wxImage GetFavIcon() const;
+    void DisableFavIconFetching();
     wxDOMDocument GetDOMDocument();
     
 };
