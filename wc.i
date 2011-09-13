@@ -269,13 +269,13 @@ private:
     
 public:
 
-    bool GetBoolPref(const wxString& name);
-    wxString GetStringPref(const wxString& name);
-    int GetIntPref(const wxString& name);
+    bool GetBoolPref(const wxString& branch_name, const wxString& name);
+    wxString GetStringPref(const wxString& branch_name, const wxString& name);
+    int GetIntPref(const wxString& branch_name, const wxString& name);
 
-    void SetIntPref(const wxString& name, int value);
-    void SetStringPref(const wxString& name, const wxString& value);
-    void SetBoolPref(const wxString& name, bool value);
+    void SetIntPref(const wxString& branch_name, const wxString& name, int value);
+    void SetStringPref(const wxString& branch_name, const wxString& name, const wxString& value);
+    void SetBoolPref(const wxString& branch_name, const wxString& name, bool value);
 };
 
 %pythoncode {
@@ -292,12 +292,19 @@ class wxWebPreferencesHelper(object):
         if not self._preferences:
             self._preferences = WebControl.GetPreferences()
 
+        branch_index = key.rfind('.') + 1
+        if branch_index == 0:
+            raise ValueError("The key '%s' does not have a branch." % key)
+
+        branch_name = key[:branch_index]
+        key_name = key[branch_index:]
+
         if isinstance(value, basestring):
-            self._preferences.SetStringPref(key, value)
+            self._preferences.SetStringPref(branch_name, key_name, value)
         elif isinstance(value, bool):
-            self._preferences.SetBoolPref(key, value)
+            self._preferences.SetBoolPref(branch_name, key_name, value)
         elif isinstance(value, int):
-            self._preferences.SetIntPref(key, value)
+            self._preferences.SetIntPref(branch_name, key_name, value)
         else:
             raise ValueError("Unrecognised value type '%s' when setting preferences." % value)
         
