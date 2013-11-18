@@ -22,9 +22,9 @@
 #include "wx/wxPython/wxPython.h"
 #include "wx/wxPython/pyclasses.h"
 
-#include "webconnect/webcontrol.h"
-#include "webconnect/dom.h"
-#include "webconnect/protocolhandler.h"
+#include "webconnect/webconnect/webcontrol.h"
+#include "webconnect/webconnect/dom.h"
+#include "webconnect/webconnect/protocolhandler.h"
 #include "pyprotocolhandler.h"
 
 #include <wx/listctrl.h>
@@ -269,13 +269,13 @@ private:
     
 public:
 
-    bool GetBoolPref(const wxString& branch_name, const wxString& name);
-    wxString GetStringPref(const wxString& branch_name, const wxString& name);
-    int GetIntPref(const wxString& branch_name, const wxString& name);
+    bool GetBoolPref(const wxString& name);
+    wxString GetStringPref(const wxString& name);
+    int GetIntPref(const wxString& name);
 
-    void SetIntPref(const wxString& branch_name, const wxString& name, int value);
-    void SetStringPref(const wxString& branch_name, const wxString& name, const wxString& value);
-    void SetBoolPref(const wxString& branch_name, const wxString& name, bool value);
+    void SetIntPref(const wxString& name, int value);
+    void SetStringPref(const wxString& name, const wxString& value);
+    void SetBoolPref(const wxString& name, bool value);
 };
 
 %pythoncode {
@@ -307,7 +307,7 @@ WebControl.preferences = wxWebPreferencesHelper()
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 
-%include "webconnect/dom.h"
+%include "webconnect/webconnect/dom.h"
 
 /* This probably leaks memory, but it doesn't really matter as protocols
  * should be registered at the start of the application and stay registered
